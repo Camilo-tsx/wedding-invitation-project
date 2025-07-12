@@ -1,12 +1,13 @@
 
 import { compare, hash } from "bcrypt";
 import { randomUUID } from "crypto";
-import { check, email, InferInput, maxLength, minLength, object, pipe, string } from "valibot";
+import { check, email, InferInput, maxLength, minLength, object, partial, pipe, string } from "valibot";
 import { db } from "./mysql/eventmanagerDb";
+import { dbQuery } from "../utils/dbQuerys/dbQuery";
 
 
 // validates data
-const emailSchema = pipe(string(), email(), minLength(3, "Email must contain at least 3 characters"), maxLength(30, "Email can not contain more than 30 characters") )
+export const emailSchema = pipe(string(), email(), minLength(3, "Email must contain at least 3 characters"), maxLength(30, "Email can not contain more than 30 characters") )
 const userNameSchema = pipe(string(),  minLength(3, "User name must contain at least 3 characters"), maxLength(30, "User name can not contain more than 30 characters"), check(
   (value) => /^[a-zA-Z0-9_.-]+$/.test(value),
   "User name can only contain letters, numbers, underscores, dots, and hyphens"
@@ -26,7 +27,7 @@ export enum ROLES {
     "USER" = "user"
 }
 
-const authSchema = object({
+export const authSchema = object({
     email: emailSchema,
     userName: userNameSchema,
     password: passwordSchema
@@ -40,7 +41,12 @@ export type User = InferInput<typeof authSchema> & {
     refreshToken?: string;
 }
 
-export type safeUser = Omit<User, 'password' | 'refreshToken'>
+export const validatePartialUser = partial(authSchema);
+
+export type PartialUser = InferInput<typeof validatePartialUser>;
+
+
+export type SafeUser = Omit<User, 'password' | 'refreshToken'>
 
 
 // create new user, create a random UUID and returns isAllowed false by default 
@@ -76,7 +82,7 @@ export const createUser = async (
 
 
 // Search if the email exists and then validates password, returns full user data
-export const validateUser = async (email: string, password: string): Promise<User | null> => {
+export const validateUser = async (email: string, password: string): Promise<SafeUser | null> => {
   try {
     const [rows] = await db.execute("SELECT BIN_TO_UUID(id) as id, userName, email, password, roles, isAllowed FROM users WHERE email = ?", [email]);
     const user = (rows as User[])[0];
@@ -86,8 +92,10 @@ export const validateUser = async (email: string, password: string): Promise<Use
     const passwordIsValid = await compare(password, user.password);
     if (!passwordIsValid) return null;
 
+    const {password:_, refreshToken, ...safeUser} = user
 
-    return user;
+
+    return safeUser;
   } catch (err) {
     console.error("Error validating password:", err);
     throw new Error("Cannot validate the password");
@@ -115,16 +123,17 @@ export const getUserById = async (id:string): Promise<User | null> => {
 }
 
 // update the user data and returns safeUser data that excludes password and refreshToken
-export const updateUser = async (user: User): Promise<User | null> => {
-    const hashedPassword = await hash(user.password, 10)
-    await db.execute("UPDATE users SET email= ?, userName= ?, password= ? WHERE id= UUID_TO_BIN(?)", [user.email, user.userName, hashedPassword, user.id])
+export const updateUser = async (user: PartialUser, id: string): Promise<SafeUser | null> => {
+    const table = "users"
+    const {query, values} = dbQuery(user, id, table)
+    if (values.length <= 0) return null;
+    await db.execute(query, values)
 
-    const updatedUser = await getUserById(user.id)
+    const updatedUser = await getUserById(id)
     if (!updatedUser) return null;
+    const { password, refreshToken, ...safeUser } = updatedUser
 
-    return updatedUser;
-
-
+    return safeUser;
 }
 
 // delete the user 
