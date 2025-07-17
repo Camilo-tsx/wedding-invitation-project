@@ -1,9 +1,15 @@
-import { db } from "./mysql/eventmanagerDb"
+import { db } from "./mysql/eventmanagerDb";
 
 // add refreshToken to the db and add the reason why were revoked too
-export const addRevokeToken = async (token: string, userId: string): Promise<void> => {
-    await db.execute("INSERT INTO revokedTokens (id, token, userId) VALUES (UUID_TO_BIN(?),?,?)", [crypto.randomUUID(), token, userId])
-}
+export const addRevokeToken = async (
+  token: string,
+  userId: string
+): Promise<void> => {
+  await db.execute(
+    "INSERT INTO revokedTokens (id, token, userId) VALUES (UUID_TO_BIN(?),?,?)",
+    [crypto.randomUUID(), token, userId]
+  );
+};
 
 interface RevokedTokenRow {
   token: string;
@@ -18,5 +24,5 @@ export const isTokenRevoked = async (token: string): Promise<boolean> => {
   const result = (rows as RevokedTokenRow[])[0];
   if (!result) return false;
 
-  return true
-}
+  return true;
+};
