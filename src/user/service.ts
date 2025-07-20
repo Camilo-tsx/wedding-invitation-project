@@ -2,7 +2,7 @@ import { compare, hash } from "bcrypt";
 import { randomUUID } from "crypto";
 import { PartialUser, ROLES, SafeUser, User } from "./model";
 import { dbQuery } from "@/utils/dbQuerys/dbQueries";
-import { db } from "./mysql/eventmanagerDb";
+import { db } from "@/models/mysql/eventmanagerDb";
 
 export const createUser = async (
   email: string,
@@ -23,7 +23,7 @@ export const createUser = async (
 
   try {
     await db.execute(
-      "INSERT INTO users (id, email, password, userName, roles, isAllowed) VALUES (UUID_TO_BIN(?),?,?,?,?,?)",
+      "INSERT INTO users (id, email, `password`, username, roles, is_allowed) VALUES (UUID_TO_BIN(?),?,?,?,?,?)",
       [id, email, hashedPassword, userName, ROLES.USER, false]
     );
   } catch (err) {
@@ -41,7 +41,7 @@ export const validateUser = async (
 ): Promise<SafeUser | null> => {
   try {
     const [rows] = await db.execute(
-      "SELECT BIN_TO_UUID(id) as id, userName, email, password, roles, isAllowed FROM users WHERE email = ?",
+      "SELECT BIN_TO_UUID(id) as id, username AS userName, email, `password`, roles, is_allowed AS isAllowed FROM users WHERE email = ?",
       [email]
     );
     const user = (rows as User[])[0];
@@ -64,7 +64,7 @@ export const validateUser = async (
 export const getUserById = async (id: string): Promise<User | null> => {
   try {
     const [rows] = await db.execute(
-      "SELECT BIN_TO_UUID(id) as id, userName, email, password, refreshToken, roles, isAllowed FROM users WHERE id = UUID_TO_BIN(?)",
+      "SELECT BIN_TO_UUID(id) as id, username AS userName, email, `password`, roles, is_allowed AS isAllowed FROM users WHERE id = UUID_TO_BIN(?)",
       [id]
     );
     const user = (rows as User[])[0];

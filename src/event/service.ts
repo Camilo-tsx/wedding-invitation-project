@@ -1,7 +1,7 @@
 import { dbQuery } from "@/utils/dbQuerys/dbQueries";
 import { EVENT_SELECT_FIELDS } from "@/utils/dbQuerys/events.model";
 import { Event, PartialEvent } from "./model";
-import { db } from "./mysql/eventmanagerDb";
+import { db } from "@/models/mysql/eventmanagerDb";
 
 export const createEvent = async (
   userId: string,
@@ -10,7 +10,7 @@ export const createEvent = async (
   const id = crypto.randomUUID();
   try {
     await db.execute(
-      "INSERT INTO events (id, userId, eventDate, location, itinerary, dressCode, husbandName, wifeName, kidsAllowed, specialMenu) VALUES(UUID_TO_BIN(?),UUID_TO_BIN(?),?,?,?,?,?,?,?,?)",
+      "INSERT INTO events (id, user_id, event_date, location, itinerary, dress_code, husband_name, wife_name, special_menu, kids_allowed) VALUES(UUID_TO_BIN(?),UUID_TO_BIN(?),?,?,?,?,?,?,?,?)",
       [
         id,
         userId,
@@ -20,8 +20,8 @@ export const createEvent = async (
         inputValues.dressCode,
         inputValues.husbandName,
         inputValues.wifeName,
-        inputValues.kidsAllowed,
         inputValues.specialMenu,
+        inputValues.kidsAllowed,
       ]
     );
     const newEvent = {
@@ -43,7 +43,7 @@ export const getEventById = async (
 ): Promise<Event | null> => {
   try {
     const [rows] = await db.execute(
-      `SELECT ${EVENT_SELECT_FIELDS} FROM events WHERE id = UUID_TO_BIN(?) and userId = UUID_TO_BIN(?)`,
+      `SELECT ${EVENT_SELECT_FIELDS} FROM events WHERE id = UUID_TO_BIN(?) and user_id = UUID_TO_BIN(?)`,
       [id, userId]
     );
     const event = (rows as Event[])[0];
@@ -89,7 +89,7 @@ export const editEvent = async (
 export const getAllEvents = async (userId: string): Promise<Event[] | null> => {
   try {
     const [rows] = await db.execute(
-      `SELECT ${EVENT_SELECT_FIELDS} FROM events WHERE userId = UUID_TO_BIN(?)`,
+      `SELECT ${EVENT_SELECT_FIELDS} FROM events WHERE user_id = UUID_TO_BIN(?)`,
       [userId]
     );
     return rows as Event[];
@@ -106,7 +106,7 @@ interface Permissions {
 export const checkPermissions = async (userId: string): Promise<boolean> => {
   try {
     const [rows] = await db.execute(
-      "SELECT isAllowed FROM users WHERE id = UUID_TO_BIN(?)",
+      "SELECT is_allowed as isAllowed FROM users WHERE id = UUID_TO_BIN(?)",
       [userId]
     );
     const permission = (rows as Permissions[])[0].isAllowed ?? false;

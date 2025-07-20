@@ -1,12 +1,11 @@
 import { isTokenRevoked } from "@/auth/revokeTokens";
 import { jwtConfig } from "@/config/config";
 import { JwtPayload, verify } from "jsonwebtoken";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 interface customPayload extends JwtPayload {
   id: string;
   userName: string;
-  password: string;
 }
 
 export const decodedToken = async (

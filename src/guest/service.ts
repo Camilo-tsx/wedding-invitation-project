@@ -1,13 +1,15 @@
 import { GUESTS_SELECT_FIELDS } from "@/utils/dbQuerys/events.model";
 import { Guest, PartialGuest } from "./model";
-import { db } from "./mysql/eventmanagerDb";
 import { dbQuery } from "@/utils/dbQuerys/dbQueries";
+import { db } from "@/models/mysql/eventmanagerDb";
 
-export const addGuest = async (guest: Guest): Promise<Guest | null> => {
-  const id = crypto.randomUUID;
+export const addGuest = async (
+  guest: Omit<Guest, "id">
+): Promise<Guest | null> => {
+  const id = crypto.randomUUID();
   try {
-    const [rows] = await db.execute(
-      "INSERT INTO guests (id, familyName, eventId, isAttending, menuOption, attendingCount) VALUES (UUID_TO_BIN(?), UUID_TO_BIN(?),?,?,?,?)",
+    await db.execute(
+      "INSERT INTO guests (id, family_name, event_id, is_attending, menu_option, attending_count) VALUES (UUID_TO_BIN(?),?,UUID_TO_BIN(?),?,?,?)",
       [
         id,
         guest.familyName,
@@ -18,9 +20,10 @@ export const addGuest = async (guest: Guest): Promise<Guest | null> => {
       ]
     );
 
-    const newGuest = (rows as Guest[])[0];
-    if (!newGuest) return null;
-    return newGuest;
+    return {
+      id,
+      ...guest,
+    };
   } catch (err) {
     console.error("Error to create new guest", err);
     return null;
@@ -43,7 +46,7 @@ export const getGuestById = async (
 ): Promise<Guest | null> => {
   try {
     const [rows] = await db.execute(
-      `SELECT ${GUESTS_SELECT_FIELDS} FROM guests WHERE id = UUID_TO_BIN(?) and eventId = UUID_TO_BIN(?)`,
+      `SELECT ${GUESTS_SELECT_FIELDS} FROM guests WHERE id = UUID_TO_BIN(?) and event_id = UUID_TO_BIN(?)`,
       [id, eventId]
     );
 
@@ -67,7 +70,7 @@ export const updateGuest = async (
   try {
     await db.execute(query, values);
   } catch (err) {
-    console.error("Guest can not be updated");
+    console.error("Guest can not be updated", err);
     return null;
   }
 
@@ -79,7 +82,7 @@ export const updateGuest = async (
 export const getAllGuest = async (eventId: string): Promise<Guest[] | null> => {
   try {
     const [rows] = await db.execute(
-      `SELECT ${GUESTS_SELECT_FIELDS} FROM guests WHERE eventId = ?`,
+      `SELECT ${GUESTS_SELECT_FIELDS} FROM guests WHERE event_id = UUID_TO_BIN(?)`,
       [eventId]
     );
     const allGuest = rows;
