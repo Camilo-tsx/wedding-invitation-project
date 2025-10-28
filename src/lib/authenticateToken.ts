@@ -1,51 +1,28 @@
-import { isTokenRevoked } from "@/auth/revokeTokens";
 import { jwtConfig } from "@/config/config";
+import { ROLES } from "@/modules/user/model";
 import { JwtPayload, verify } from "jsonwebtoken";
-import { NextRequest } from "next/server";
 
-interface customPayload extends JwtPayload {
+export interface UserFromPayload extends JwtPayload {
   id: string;
   userName: string;
+  isAllowed: boolean;
+  email: string;
+  roles: ROLES;
 }
 
-export const decodedToken = async (
-  req: NextRequest
-): Promise<customPayload | null> => {
-  const accessToken = req.cookies.get("accessToken")?.value;
-
-  if (!accessToken) {
+export const verifyAccessToken = (token: string): UserFromPayload | null => {
+  if (!token) {
     return null;
   }
 
+  if (!jwtConfig.jwtAccessSecret) {
+    throw new Error("JWT secret is missing in config");
+  }
+
   try {
-    const decoded = verify(accessToken, jwtConfig.jwtSecret!) as customPayload;
-    return decoded;
+    const user = verify(token, jwtConfig.jwtAccessSecret) as UserFromPayload;
+    return user;
   } catch (_err) {
     return null;
-  }
-};
-
-export const authenticateToken = async (req: NextRequest): Promise<boolean> => {
-  const accessToken = req.cookies.get("accessToken")?.value;
-  const refreshToken = req.cookies.get("refreshToken")?.value;
-
-  if (!accessToken || !refreshToken) {
-    return false;
-  }
-
-  if (await isTokenRevoked(refreshToken)) {
-    return false;
-  }
-
-  try {
-    const verifyAccessToken = verify(accessToken, jwtConfig.jwtSecret!);
-    if (!verifyAccessToken) return false;
-
-    const verifyRefreshToken = verify(refreshToken, jwtConfig.jwtSecret!);
-    if (!verifyRefreshToken) return false;
-
-    return true;
-  } catch (_err) {
-    return false;
   }
 };

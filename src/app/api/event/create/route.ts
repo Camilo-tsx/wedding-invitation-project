@@ -1,26 +1,37 @@
-"user server";
-import { checkPermissions, createEvent } from "@/event/service";
-import { eventSchema } from "@/event/validation";
-import { decodedToken } from "@/lib/authenticateToken";
+"use server";
+import { verifyAccessToken } from "@/lib/authenticateToken";
+import { checkPermissions, createEvent } from "@/modules/event/service";
+import { eventSchema } from "@/schemas/event.schema";
 import { NextRequest, NextResponse } from "next/server";
 import { safeParse } from "valibot";
 
 export const POST = async (req: NextRequest) => {
-  const payload = await decodedToken(req);
+  const accessToken = req.cookies.get("accessToken")?.value;
+  if (!accessToken)
+    return NextResponse.json(
+      {
+        error: "Debes iniciar sesion para poder crear una invitación",
+        field: "dressCode",
+      },
+      { status: 401 }
+    );
+  const payload = verifyAccessToken(accessToken);
   if (!payload)
     return NextResponse.json(
-      { message: "Can not get the payload" },
+      { error: "Can not get the payload", field: "dressCode" },
       { status: 400 }
     );
   const userId = payload.id;
   const isAuthorized = await checkPermissions(userId);
   if (!isAuthorized)
     return NextResponse.json(
-      { message: "Not authorized to create an event" },
+      {
+        error: "Es necesario pagar el servicio para poder crear una invitación",
+        field: "dressCode",
+      },
       { status: 403 }
     );
   const body = await req.json();
-  body.eventDate = new Date(body.eventDate);
   const result = safeParse(eventSchema, body);
   if (!result.success) {
     return NextResponse.json(

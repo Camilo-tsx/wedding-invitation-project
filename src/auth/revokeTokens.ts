@@ -6,7 +6,7 @@ export const addRevokeToken = async (
   userId: string
 ): Promise<void> => {
   await db.execute(
-    "INSERT INTO revoked_tokens (id, token, user_id) VALUES (UUID_TO_BIN(?),?,?)",
+    "INSERT INTO revoked_tokens (id, token, user_id) VALUES (UUID_TO_BIN(?),?,UUID_TO_BIN(?))",
     [crypto.randomUUID(), token, userId]
   );
 };

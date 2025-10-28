@@ -1,0 +1,35 @@
+.heart {
+  opacity: 0;
+}
+
+.heart-fill {
+  opacity: 1;
+  clip-path: inset(100% 0 0 0);
+  animation: fillUp 2.5s ease forwards;
+}
+
+@keyframes fillUp {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.heart-stroke path {
+  fill: transparent;
+  stroke: transparent;
+}
+
+.contact {
+  opacity: 0;
+}
+
+.fade {
+  animation: fade 2.5s ease-in-out forwards;
+  animation-delay: 0.5s;
+}
+
+@keyframes fade {
+  to {
+    opacity: 1;
+  }
+}

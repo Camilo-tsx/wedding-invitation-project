@@ -1,13 +1,16 @@
 "user server";
-import { decodedToken } from "@/lib/authenticateToken";
-import { updateUser } from "@/user/service";
-import { validatePartialUser } from "@/user/validation";
+import { verifyAccessToken } from "@/lib/authenticateToken";
+import { updateUser } from "@/modules/user/service";
+import { validatePartialUser } from "@/schemas/auth.schema";
 import { NextRequest, NextResponse } from "next/server";
 import { safeParse } from "valibot";
 
 // update user
 export const POST = async (req: NextRequest) => {
-  const payload = await decodedToken(req);
+  const accessToken = req.cookies.get("accessToken")?.value;
+  if (!accessToken)
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  const payload = verifyAccessToken(accessToken);
   if (!payload)
     return NextResponse.json(
       { message: "Can not get the payload" },

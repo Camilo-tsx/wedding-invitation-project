@@ -1,17 +1,17 @@
-import { deleteGuest } from "@/guest/service";
+import { deleteGuest } from "@/modules/guest/service";
 import { NextRequest, NextResponse } from "next/server";
 
-export const DELETE = async (req: NextRequest) => {
+export const POST = async (req: NextRequest) => {
   const body = await req.json();
-  const { id } = body;
-  if (!id)
+  const { guestId } = body;
+  if (!guestId)
     return NextResponse.json(
       { message: "Can not delete your guest" },
       { status: 400 }
     );
 
   try {
-    await deleteGuest(id);
+    await deleteGuest(guestId);
     return NextResponse.json({ message: "Delete Succefull" }, { status: 200 });
   } catch (err) {
     if (err instanceof Error) {

@@ -28,7 +28,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/models",
-    "src/app/api/event/myevents/[id]/route.ts"
+    "src/app/api/event/myevents/getevent/route.ts"
   ],
   "exclude": ["node_modules"]
 }

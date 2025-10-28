@@ -1,7 +1,7 @@
-"user server";
+"use server";
 
-import { createUser } from "@/user/service";
-import { authSchema } from "@/user/validation";
+import { registerAndLogin } from "@/modules/user/service";
+import { authSchema } from "@/schemas/auth.schema";
 import { NextRequest, NextResponse } from "next/server";
 import { safeParse } from "valibot";
 
@@ -9,25 +9,18 @@ import { safeParse } from "valibot";
 export const POST = async (req: NextRequest) => {
   const body = await req.json();
   const result = safeParse(authSchema, body);
-  if (!result.success) {
-    return NextResponse.json({ error: "Bad request" }, { status: 400 });
-  }
+  if (!result.success)
+    return NextResponse.json({ message: "Bad Request" }, { status: 400 });
 
-  const { email, password, userName } = body;
+  const { email, password, userName } = result.output;
+
   try {
-    const newUser = await createUser(email, password, userName);
-
-    return NextResponse.json(newUser, {
-      status: 201,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  } catch (err) {
-    if (err instanceof Error) {
-      return NextResponse.json({ message: err.message });
-    } else {
-      return NextResponse.json({ message: "Internal Server Error" });
-    }
+    const response = await registerAndLogin(email, password, userName);
+    return response;
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Error al registrar usuario" },
+      { status: 500 }
+    );
   }
 };

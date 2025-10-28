@@ -1,36 +1,50 @@
-"user server";
-import { validateUser } from "@/user/service";
-import { authSchema } from "@/user/validation";
+"use server";
+import { jwtConfig } from "@/config/config";
+import { validateUser } from "@/modules/user/service";
+import { loginSchema } from "@/schemas/auth.schema";
 import { sign } from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 import { safeParse } from "valibot";
 
 export const POST = async (req: NextRequest) => {
   const body = await req.json();
-  const result = safeParse(authSchema, body);
+  const result = safeParse(loginSchema, body);
   if (!result.success)
-    return NextResponse.json({ message: "Bad Request", status: 400 });
+    return NextResponse.json({ message: "Bad Request" }, { status: 400 });
 
   const { email, password } = result.output;
 
   const user = await validateUser(email, password);
   if (!user)
-    return NextResponse.json({
-      message: "Invalid email or password",
-      status: 401,
-    });
+    return NextResponse.json(
+      {
+        error: "Usuario o contraseña invalidos",
+        field: "password",
+      },
+      { status: 401 }
+    );
 
-  const secret = process.env.JWT_SECRET;
-  if (!secret)
+  if (!jwtConfig.jwtAccessSecret)
     throw new Error("JWT_SECRET is not defined in environment variables");
 
   const accessToken = sign(
-    { id: user.id, email: user.email, roles: user.roles },
-    secret,
+    {
+      id: user.id,
+      email: user.email,
+      roles: user.roles,
+      userName: user.userName,
+      isAllowed: user.isAllowed,
+    },
+    jwtConfig.jwtAccessSecret,
     { expiresIn: "30m" }
   );
 
-  const refreshToken = sign({ userId: user.id }, secret, { expiresIn: "7d" });
+  if (!jwtConfig.jwtRefreshSecret)
+    throw new Error("JWT_SECRET is not defined in environment variables");
+
+  const refreshToken = sign({ userId: user.id }, jwtConfig.jwtRefreshSecret, {
+    expiresIn: "7d",
+  });
 
   const response = NextResponse.json({ message: "Login successful" });
 

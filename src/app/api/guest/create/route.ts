@@ -1,11 +1,14 @@
-import { addGuest } from "@/guest/service";
-import { guestSchema } from "@/guest/validation";
+import { addGuest } from "@/modules/guest/service";
+import { guestSchema } from "@/schemas/guest.schema";
+
 import { NextRequest, NextResponse } from "next/server";
 import { safeParse } from "valibot";
 
 export const POST = async (req: NextRequest) => {
   const body = await req.json();
-  const result = safeParse(body, guestSchema);
+  console.log("body: ", body);
+  const { eventId, ...data } = body;
+  const result = safeParse(guestSchema, data);
 
   if (!result.success)
     return NextResponse.json(
@@ -13,10 +16,16 @@ export const POST = async (req: NextRequest) => {
       { status: 400 }
     );
 
-  const guest = result.output;
-
+  console.log("ahora si paso el body");
+  const guest = {
+    ...result.output,
+    eventId,
+  };
+  console.log("llega el guest");
   try {
+    console.log("entro al try");
     const newGuest = await addGuest(guest);
+
     if (!newGuest)
       return NextResponse.json(
         { message: "Guest Can Not Be Created" },

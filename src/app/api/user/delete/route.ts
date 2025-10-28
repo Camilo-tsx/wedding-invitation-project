@@ -1,7 +1,7 @@
 "user server";
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { deleteUser } from "@/user/service";
+import { deleteUser } from "@/modules/user/service";
 
 export const DELETE = async (req: NextRequest) => {
   const token = req.cookies.get("accessToken")?.value;

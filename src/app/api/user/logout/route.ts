@@ -1,25 +1,29 @@
-"user server";
+"use server";
 import { addRevokeToken, isTokenRevoked } from "@/auth/revokeTokens";
+import { jwtConfig } from "@/config/config";
 import jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
-  const accessToken = req.cookies.get("accessToken")?.value;
   const refreshToken = req.cookies.get("refreshToken")?.value;
 
-  if (!accessToken || !refreshToken)
-    return NextResponse.json({ message: "Token error" }, { status: 401 });
+  if (!refreshToken)
+    return NextResponse.json({ message: "Token error" }, { status: 404 });
   try {
-    const payload = jwt.verify(accessToken, process.env.JWT_SECRET!) as {
+    const payload = jwt.verify(refreshToken, jwtConfig.jwtRefreshSecret!) as {
       userId: string;
     };
 
     const userId = payload.userId;
 
     if (!userId)
-      return NextResponse.json({ error: "Invalid token payload", status: 400 });
+      return NextResponse.json(
+        { error: "Invalid token payload" },
+        { status: 400 }
+      );
 
     const revoked = await isTokenRevoked(refreshToken);
+
     if (!revoked) await addRevokeToken(refreshToken, userId);
 
     const response = NextResponse.json({

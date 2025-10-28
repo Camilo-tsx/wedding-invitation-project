@@ -1,3 +1,4 @@
 export const jwtConfig = {
-  jwtSecret: process.env.JWT_SECRET,
+  jwtRefreshSecret: process.env.JWT_SECRET,
+  jwtAccessSecret: process.env.JWT_SECRET_R,
 };

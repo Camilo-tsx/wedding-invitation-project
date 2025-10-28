@@ -1,0 +1,38 @@
+.text-fill {
+  clip-path: inset(0 100% 0 0);
+  animation: fillUpText 2s ease forwards;
+  animation-delay: 2s;
+  padding: 0.2em 0.1em;
+}
+
+@keyframes fillUpText {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.line-fill {
+  clip-path: inset(0 100% 0 0);
+  animation: fillLine 1s ease forwards;
+  animation-delay: 4s;
+  object-fit: cover; /* Añade esto */
+  min-width: 100%; /* O esto */
+}
+
+@keyframes fillLine {
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.hero-opacity-animation {
+  opacity: 0;
+  animation: heroVisible 2s ease-in-out forwards;
+  animation-delay: 4.5s;
+}
+
+@keyframes heroVisible {
+  to {
+    opacity: 1;
+  }
+}

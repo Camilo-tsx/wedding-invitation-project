@@ -1,0 +1,21 @@
+.event-card {
+  background: #a0c9ff;
+  background: linear-gradient(
+    360deg,
+    rgba(160, 201, 255, 0.5) 0%,
+    rgba(222, 150, 235, 0.5) 100%
+  );
+
+  box-shadow: 0 4px 6px -1px #efefef, 0 2px 4px -2px #efefef;
+}
+
+.event-card-container button {
+  width: 80%;
+  border: 1px solid white;
+  padding: 3px;
+  border-radius: 10px;
+}
+
+.event-card-container a {
+  width: 100%;
+}

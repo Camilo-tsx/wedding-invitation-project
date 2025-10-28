@@ -1,33 +1,40 @@
-"user server";
-import { getAllEvents } from "@/event/service";
-import { decodedToken } from "@/lib/authenticateToken";
-import { NextRequest, NextResponse } from "next/server";
+"use server";
+import { NextResponse } from "next/server";
+import { requireAuth } from "@/lib/requireAuth";
+import { getAllEvents } from "@/modules/event/service";
 
-export const GET = async (req: NextRequest) => {
-  const payload = await decodedToken(req);
-  if (!payload)
-    return NextResponse.json(
-      { message: "Can not get the payload" },
-      { status: 400 }
-    );
-  const userId = payload.id;
+export async function GET() {
+  const { user, newAccessToken } = await requireAuth();
+
+  if (!user) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
 
   try {
-    const events = await getAllEvents(userId);
-    if (!events)
+    const events = await getAllEvents(user.id);
+
+    if (!events) {
       return NextResponse.json({ message: "Not Found" }, { status: 404 });
-    return NextResponse.json(events, {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch (err) {
-    if (err instanceof Error) {
-      return NextResponse.json({ message: err.message });
-    } else {
-      return NextResponse.json(
-        { message: "Internar Server Error" },
-        { status: 500 }
-      );
     }
+
+    const res = NextResponse.json({ events, userId: user.id }, { status: 200 });
+
+    // Si se renovó el accessToken → setear cookie en la misma response
+    if (newAccessToken) {
+      res.cookies.set("accessToken", newAccessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        path: "/",
+        sameSite: "strict",
+        maxAge: 60 * 30,
+      });
+    }
+
+    return res;
+  } catch (err) {
+    return NextResponse.json(
+      { message: err instanceof Error ? err.message : "Internal Server Error" },
+      { status: 500 }
+    );
   }
-};
+}
