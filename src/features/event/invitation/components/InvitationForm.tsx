@@ -45,7 +45,7 @@ const InvitationForm = ({ hasMenuOptions, eventId }: HasMenuOptionsProps) => {
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
       setIsLoading(true);
-      const res = await fetch("/api/guest/create", {
+      const res = await fetch("/api/guest", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...data, eventId }),

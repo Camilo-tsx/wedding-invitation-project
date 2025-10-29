@@ -32,7 +32,7 @@ const RegisterForm = () => {
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
       setIsLoading(true);
-      const res = await fetch("/api/user/register", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

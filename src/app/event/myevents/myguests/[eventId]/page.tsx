@@ -73,7 +73,7 @@ export const MyGuestsPage = ({ params }: EventIdParam) => {
   useEffect(() => {
     const fetchGuests = async () => {
       try {
-        const res = await fetch(`/api/guest/myguests/${eventId}`);
+        const res = await fetch(`/api/guest/id/${eventId}`);
         if (!res.ok) throw new Error("Error en el fetch");
         const result = await res.json();
         setGuests(Array.isArray(result) ? result : []);
@@ -94,10 +94,9 @@ export const MyGuestsPage = ({ params }: EventIdParam) => {
   const handleDelete = async (guestId: string) => {
     try {
       setGuestIsDeleting(true);
-      const res = await fetch("/api/guest/delete", {
-        method: "POST",
+      const res = await fetch(`/api/guest/${guestId}`, {
+        method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ guestId }),
       });
 
       if (!res.ok) {

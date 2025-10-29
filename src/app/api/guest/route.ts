@@ -4,6 +4,7 @@ import { guestSchema } from "@/schemas/guest.schema";
 import { NextRequest, NextResponse } from "next/server";
 import { safeParse } from "valibot";
 
+//Create new guest
 export const POST = async (req: NextRequest) => {
   const body = await req.json();
   console.log("body: ", body);

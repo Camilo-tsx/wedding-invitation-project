@@ -1,29 +1,73 @@
-"use server";
+import { PartialGuest } from "@/modules/guest/model";
+import { updateGuest } from "@/modules/guest/service";
+import { guestFieldsPartial, partialGuestSchema } from "@/schemas/guest.schema";
+import { NextRequest, NextResponse } from "next/server";
 import { requireAuth } from "@/lib/requireAuth";
 import { checkOwner } from "@/modules/event/service";
 import { getAllGuest } from "@/modules/guest/service";
-import { NextResponse } from "next/server";
+import { safeParse } from "valibot";
 
+interface Params {
+  params: Record<string, string>;
+}
+
+//Edit a guest
+export const PATCH = async (req: NextRequest, { params }: Params) => {
+  const { eventId, id } = params;
+
+  const body = await req.json();
+
+  const result = safeParse(guestFieldsPartial, body);
+  if (!result.success) {
+    return NextResponse.json(
+      { message: "Bad Request", error: result.issues },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const guest: PartialGuest = { ...result.output, id };
+    const updatedGuest = await updateGuest(guest, eventId);
+    if (!updatedGuest)
+      return NextResponse.json({ message: "Guest not found" }, { status: 404 });
+    return NextResponse.json(updatedGuest, {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error("Error: ", err.message);
+      return NextResponse.json(
+        { message: "An error has ocurred" },
+        { status: 500 }
+      );
+    } else {
+      return NextResponse.json(
+        { message: "Internal Server Error" },
+        { status: 500 }
+      );
+    }
+  }
+};
+
+//Get all guests
 export const GET = async (
   _req: Request,
   { params }: { params: { eventId: string } }
 ) => {
   const { eventId } = params;
 
-  // 1. Verificar autenticación
   const { user, newAccessToken } = await requireAuth();
 
   if (!user) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
-  // 2. Verificar ownership
   const isOwner = await checkOwner(user.id, eventId);
   if (!isOwner) {
     return NextResponse.json({ message: "Forbidden" }, { status: 403 });
   }
 
-  // 3. Traer invitados
   try {
     const guests = await getAllGuest(eventId);
 
@@ -38,17 +82,15 @@ export const GET = async (
       return NextResponse.json(guests, { status: 204 });
     }
 
-    // 4. Preparar respuesta
     const response = NextResponse.json(guests, { status: 200 });
 
-    // Si hay un nuevo accessToken, setearlo en cookies
     if (newAccessToken) {
       response.cookies.set("accessToken", newAccessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
         path: "/",
-        maxAge: 60 * 60, // 1h
+        maxAge: 60 * 60,
       });
     }
 

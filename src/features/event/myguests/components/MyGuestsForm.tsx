@@ -46,7 +46,7 @@ const EditedGuestForm = ({
       try {
         setIsLoading(true);
 
-        const res = await fetch(`/api/guest/update/${id}/${eventId}`, {
+        const res = await fetch(`/api/guest/${id}/${eventId}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),

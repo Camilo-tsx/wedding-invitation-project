@@ -1,17 +1,22 @@
-import { deleteEvent } from "@/modules/event/service";
+import { deleteGuest } from "@/modules/guest/service";
 import { NextRequest, NextResponse } from "next/server";
 
-export const DELETE = async (req: NextRequest) => {
-  const body = await req.json();
-  const { eventId, userId } = body;
-  if (!eventId)
+interface Params {
+  params: {
+    id: string;
+  };
+}
+// Delete guest
+export const DELETE = async (req: NextRequest, { params }: Params) => {
+  const guestId = params.id;
+  if (!guestId)
     return NextResponse.json(
       { message: "Can not delete your guest" },
       { status: 400 }
     );
 
   try {
-    await deleteEvent(eventId, userId);
+    await deleteGuest(guestId);
     return NextResponse.json({ message: "Delete Succefull" }, { status: 200 });
   } catch (err) {
     if (err instanceof Error) {

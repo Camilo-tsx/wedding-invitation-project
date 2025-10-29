@@ -16,7 +16,7 @@ export const HeaderClient = ({ isAuth: initialIsAuth }: HeaderClientProps) => {
 
   const logOut = async () => {
     try {
-      const res = await fetch("/api/user/logout", {
+      const res = await fetch("/api/auth/logout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
