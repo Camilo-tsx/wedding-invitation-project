@@ -1,6 +1,6 @@
 "use server";
 
-import { registerAndLogin } from "@/modules/user/service";
+import { registerAndLogin } from "@/core/services/user/service";
 import { authSchema } from "@/schemas/auth.schema";
 import { NextRequest, NextResponse } from "next/server";
 import { safeParse } from "valibot";

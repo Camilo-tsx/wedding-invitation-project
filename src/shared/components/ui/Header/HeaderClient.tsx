@@ -2,8 +2,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import "./Header.css";
-import { BurgerMenuIcon } from "../../public/icons/BurgerMenu";
-import { CloseIcon } from "../../public/icons/CloseIcon";
+import { BurgerMenuIcon } from "../../../../../public/icons/BurgerMenu";
+import { CloseIcon } from "../../../../../public/icons/CloseIcon";
 
 interface HeaderClientProps {
   isAuth: boolean;

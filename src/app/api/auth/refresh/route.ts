@@ -1,6 +1,6 @@
-import { isTokenRevoked } from "@/auth/revokeTokens";
+import { isTokenRevoked } from "@/core/services/auth/revokeTokens";
 import { jwtConfig } from "@/config/config";
-import { getUserById } from "@/modules/user/service";
+import { getUserById } from "@/core/services/user/service";
 import { sign, verify } from "jsonwebtoken";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";

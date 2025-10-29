@@ -1,11 +1,11 @@
 "use client";
-import InputForm from "@/components/form/CustomInput";
-import { valibotResolver } from "@/components/form/valibotResolver";
+import InputForm from "@/shared/components/form/CustomInput";
+import { valibotResolver } from "@/shared/components/form/valibotResolver";
 import { Dispatch, SetStateAction, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { InferInput } from "valibot";
 import { guestFieldsPartial } from "@/schemas/guest.schema";
-import { Guest } from "@/modules/guest/model";
+import { Guest } from "@/core/services/guest/model";
 
 type FormValues = InferInput<typeof guestFieldsPartial>;
 

@@ -1,11 +1,11 @@
-import { PartialGuest } from "@/modules/guest/model";
-import { updateGuest } from "@/modules/guest/service";
+import { updateGuest } from "@/core/services/guest/service";
 import { guestFieldsPartial, partialGuestSchema } from "@/schemas/guest.schema";
 import { NextRequest, NextResponse } from "next/server";
-import { requireAuth } from "@/lib/requireAuth";
-import { checkOwner } from "@/modules/event/service";
-import { getAllGuest } from "@/modules/guest/service";
+import { requireAuth } from "@/core/services/auth/requireAuth";
+import { checkOwner } from "@/core/services/event/service";
+import { getAllGuest } from "@/core/services/guest/service";
 import { safeParse } from "valibot";
+import { PartialGuest } from "@/core/services/guest/model";
 
 interface Params {
   params: Record<string, string>;

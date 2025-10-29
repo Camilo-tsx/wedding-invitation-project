@@ -1,9 +1,9 @@
 "use client";
 
-import { CheckboxForm } from "@/components/form/CheckBoxForm";
-import InputForm from "@/components/form/CustomInput";
-import SelectForm from "@/components/form/SelectForm";
-import { valibotResolver } from "@/components/form/valibotResolver";
+import { CheckboxForm } from "@/shared/components/form/CheckBoxForm";
+import InputForm from "@/shared/components/form/CustomInput";
+import SelectForm from "@/shared/components/form/SelectForm";
+import { valibotResolver } from "@/shared/components/form/valibotResolver";
 import { guestSchema } from "@/schemas/guest.schema";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";

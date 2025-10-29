@@ -2,8 +2,8 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { loginSchema } from "@/schemas/auth.schema";
 import { InferInput } from "valibot";
-import { valibotResolver } from "@/components/form/valibotResolver";
-import InputForm from "@/components/form/CustomInput";
+import { valibotResolver } from "@/shared/components/form/valibotResolver";
+import InputForm from "@/shared/components/form/CustomInput";
 import "../auth.css";
 import { useState } from "react";
 

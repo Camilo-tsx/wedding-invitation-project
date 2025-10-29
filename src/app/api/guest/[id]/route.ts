@@ -1,4 +1,4 @@
-import { deleteGuest } from "@/modules/guest/service";
+import { deleteGuest } from "@/core/services/guest/service";
 import { NextRequest, NextResponse } from "next/server";
 
 interface Params {

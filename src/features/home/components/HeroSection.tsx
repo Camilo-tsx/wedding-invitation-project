@@ -1,6 +1,5 @@
 import { ScrollIcon } from "../icons/Scrollbutton";
 import Link from "next/link";
-import { HeroText } from "../icons/HeroText";
 import "../styles/HeroText.css";
 
 export const Hero = () => {

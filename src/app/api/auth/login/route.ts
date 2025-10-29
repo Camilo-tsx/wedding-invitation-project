@@ -1,6 +1,6 @@
 "use server";
 import { jwtConfig } from "@/config/config";
-import { validateUser } from "@/modules/user/service";
+import { validateUser } from "@/core/services/user/service";
 import { loginSchema } from "@/schemas/auth.schema";
 import { sign } from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";

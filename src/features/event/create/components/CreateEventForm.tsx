@@ -1,7 +1,7 @@
 "use client";
-import { CheckboxForm } from "@/components/form/CheckBoxForm";
-import InputForm from "@/components/form/CustomInput";
-import { valibotResolver } from "@/components/form/valibotResolver";
+import { CheckboxForm } from "@/shared/components/form/CheckBoxForm";
+import InputForm from "@/shared/components/form/CustomInput";
+import { valibotResolver } from "@/shared/components/form/valibotResolver";
 import { eventSchema, validatePartialEvent } from "@/schemas/event.schema";
 import { useState } from "react";
 import { SubmitHandler, useForm, FieldError } from "react-hook-form";

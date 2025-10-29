@@ -4,14 +4,12 @@ interface DBQueryResult {
 }
 
 const fieldMapping: Record<string, string> = {
-  // Campos para tabla guests
   menuOption: "menu_option",
   eventId: "event_id",
   isAttending: "is_attending",
   attendingCount: "attending_count",
   familyName: "family_name",
 
-  // Campos para tabla events
   userId: "user_id",
   eventDate: "event_date",
   location: "location",
@@ -21,7 +19,6 @@ const fieldMapping: Record<string, string> = {
   wifeName: "wife_name",
   specialMenu: "special_menu",
   kidsAllowed: "kids_allowed",
-  // Nota: 'id' no necesita mapeo ya que se mantiene igual
 };
 
 export const dbQuery = (
@@ -34,7 +31,6 @@ export const dbQuery = (
 
   for (const [key, value] of Object.entries(param)) {
     if (value !== undefined && key !== "id") {
-      // Usar el mapeo o el nombre original si no existe mapeo
       const columnName = fieldMapping[key] || key;
       setUpdates.push(`${columnName} = ?`);
       values.push(value);

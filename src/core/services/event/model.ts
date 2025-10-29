@@ -1,5 +1,8 @@
 import { InferInput } from "valibot";
-import { eventSchema, validatePartialEvent } from "../../schemas/event.schema";
+import {
+  eventSchema,
+  validatePartialEvent,
+} from "../../../schemas/event.schema";
 
 export type PartialEvent = InferInput<typeof validatePartialEvent>;
 

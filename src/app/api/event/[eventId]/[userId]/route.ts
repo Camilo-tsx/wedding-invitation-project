@@ -1,4 +1,4 @@
-import { deleteEvent, getEventById } from "@/modules/event/service";
+import { deleteEvent, getEventById } from "@/core/services/event/service";
 import { NextRequest, NextResponse } from "next/server";
 
 interface Params {

@@ -1,4 +1,4 @@
-import { Leaf } from "@/components/leaf";
+import { Leaf } from "@/shared/components/ui/effects/leaf";
 import { Hero } from "@/features/home/components/HeroSection";
 
 import { VisualTextSection } from "@/features/home/components/VisualTextSection";

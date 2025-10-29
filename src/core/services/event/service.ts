@@ -1,7 +1,7 @@
-import { dbQuery } from "@/utils/dbQuerys/dbQueries";
-import { EVENT_SELECT_FIELDS } from "@/utils/dbQuerys/events.model";
+import { dbQuery } from "@/core/database/mappers/db.mapper";
+import { EVENT_SELECT_FIELDS } from "@/core/database/queries/db.queries";
 import { Event, PartialEvent } from "./model";
-import { db } from "@/models/mysql/eventmanagerDb";
+import { db } from "@/core/database/connection";
 
 export const createEvent = async (
   userId: string,

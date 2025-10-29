@@ -1,6 +1,6 @@
 "use server";
-import { verifyAccessToken } from "@/lib/authenticateToken";
-import { editEvent } from "@/modules/event/service";
+import { verifyAccessToken } from "@/core/services/auth/authenticateToken";
+import { editEvent } from "@/core/services/event/service";
 import { validatePartialEvent } from "@/schemas/event.schema";
 import { NextRequest, NextResponse } from "next/server";
 import { safeParse } from "valibot";

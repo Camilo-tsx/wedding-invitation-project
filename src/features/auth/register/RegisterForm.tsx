@@ -1,7 +1,7 @@
 "use client";
 
-import { valibotResolver } from "@/components/form/valibotResolver";
-import InputForm from "@/components/form/CustomInput";
+import { valibotResolver } from "@/shared/components/form/valibotResolver";
+import InputForm from "@/shared/components/form/CustomInput";
 import "../auth.css";
 import { InferInput } from "valibot";
 import { SubmitHandler, useForm } from "react-hook-form";

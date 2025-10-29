@@ -1,5 +1,5 @@
 "use client";
-import { Event } from "@/modules/event/model";
+import { Event } from "@/core/services/event/model";
 import { useEffect, useState } from "react";
 import "../styles/myevents.css";
 import Link from "next/link";
@@ -54,10 +54,9 @@ export const MyEvents = () => {
 
   const deleteInvitation = async (userId: string, eventId: string) => {
     try {
-      const res = await fetch("/api/event", {
+      const res = await fetch(`/api/event/${eventId}/${userId}`, {
         method: "DELETE",
         headers: { "Content-type": "application/json" },
-        body: JSON.stringify({ userId, eventId }),
       });
 
       if (!res.ok) {

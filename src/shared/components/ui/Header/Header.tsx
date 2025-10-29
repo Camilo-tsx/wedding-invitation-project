@@ -1,8 +1,7 @@
 import Link from "next/link";
-
-import { HeaderClient } from "./HeaderClient";
-import { checkUiStatus } from "@/hooks/checkUiStatus";
 import { HeaderDesktop } from "./HeaderDesktop";
+import { HeaderClient } from "./HeaderClient";
+import { checkUiStatus } from "@/core/services/auth/checkUiStatus";
 
 export const Header = async () => {
   const checked = await checkUiStatus();

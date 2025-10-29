@@ -1,5 +1,5 @@
+import { authSchema, validatePartialUser } from "@/schemas/auth.schema";
 import { InferInput } from "valibot";
-import { authSchema, validatePartialUser } from "../../schemas/auth.schema";
 
 export enum ROLES {
   ADMIN = "admin",

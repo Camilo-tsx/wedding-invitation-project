@@ -1,5 +1,5 @@
 "use client";
-import { useObserver } from "@/components/observer";
+import { useObserver } from "@/shared/components/hooks/useObserver";
 import { Heart } from "../icons/Heart";
 import { useEffect } from "react";
 import { InstagramLogo } from "../icons/Instagram";

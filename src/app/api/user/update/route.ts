@@ -1,6 +1,6 @@
 "user server";
-import { verifyAccessToken } from "@/lib/authenticateToken";
-import { updateUser } from "@/modules/user/service";
+import { verifyAccessToken } from "@/core/services/auth/authenticateToken";
+import { updateUser } from "@/core/services/user/service";
 import { validatePartialUser } from "@/schemas/auth.schema";
 import { NextRequest, NextResponse } from "next/server";
 import { safeParse } from "valibot";

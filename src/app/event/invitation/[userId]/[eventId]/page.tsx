@@ -1,7 +1,7 @@
 "use client";
 import { InvitationPage } from "@/features/event/invitation/components/InvitationPage";
 import { WeddingInvitation } from "@/features/event/invitation/defaultInvitationValues";
-import { Event } from "@/modules/event/model";
+import { Event } from "@/core/services/event/model";
 import { use, useEffect, useState } from "react";
 
 interface Params {

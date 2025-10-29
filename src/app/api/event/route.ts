@@ -1,12 +1,12 @@
 "use server";
-import { verifyAccessToken } from "@/lib/authenticateToken";
-import { checkPermissions, createEvent } from "@/modules/event/service";
+import { verifyAccessToken } from "@/core/services/auth/authenticateToken";
+import { checkPermissions, createEvent } from "@/core/services/event/service";
 import { eventSchema } from "@/schemas/event.schema";
 import { NextRequest, NextResponse } from "next/server";
 import { safeParse } from "valibot";
-import { deleteEvent } from "@/modules/event/service";
-import { requireAuth } from "@/lib/requireAuth";
-import { getAllEvents } from "@/modules/event/service";
+import { deleteEvent } from "@/core/services/event/service";
+import { requireAuth } from "@/core/services/auth/requireAuth";
+import { getAllEvents } from "@/core/services/event/service";
 
 //Create new event
 

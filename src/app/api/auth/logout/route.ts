@@ -1,5 +1,8 @@
 "use server";
-import { addRevokeToken, isTokenRevoked } from "@/auth/revokeTokens";
+import {
+  addRevokeToken,
+  isTokenRevoked,
+} from "@/core/services/auth/revokeTokens";
 import { jwtConfig } from "@/config/config";
 import jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";

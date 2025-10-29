@@ -1,6 +1,5 @@
 "use client";
 import EditedGuestForm from "@/features/event/myguests/components/MyGuestsForm";
-import { Guest } from "@/modules/guest/model";
 import { use, useEffect, useState } from "react";
 import { CheckIcon } from "../../../../../../public/icons/CheckIcon";
 import { XIcon } from "../../../../../../public/icons/XIcon";
@@ -9,6 +8,7 @@ import { InfoIcon } from "../../../../../../public/icons/InfoIcon";
 import { EditIcon } from "../../../../../../public/icons/EditIcon";
 import { TrashIcon } from "../../../../../../public/icons/TrashIcon";
 import { SearchIcon } from "../../../../../../public/icons/SearchIcon";
+import { Guest } from "@/core/services/guest/model";
 
 export interface EventIdParam {
   params: Promise<{ eventId: string }>;

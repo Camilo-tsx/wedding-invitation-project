@@ -1,4 +1,4 @@
-import { addGuest } from "@/modules/guest/service";
+import { addGuest } from "@/core/services/guest/service";
 import { guestSchema } from "@/schemas/guest.schema";
 
 import { NextRequest, NextResponse } from "next/server";

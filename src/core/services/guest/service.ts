@@ -1,7 +1,7 @@
-import { GUESTS_SELECT_FIELDS } from "@/utils/dbQuerys/events.model";
+import { GUESTS_SELECT_FIELDS } from "@/core/database/queries/db.queries";
 import { Guest, PartialGuest } from "./model";
-import { dbQuery } from "@/utils/dbQuerys/dbQueries";
-import { db } from "@/models/mysql/eventmanagerDb";
+import { dbQuery } from "@/core/database/mappers/db.mapper";
+import { db } from "@/core/database/connection";
 
 export const addGuest = async (
   guest: Omit<Guest, "id">

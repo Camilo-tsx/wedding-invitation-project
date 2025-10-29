@@ -1,6 +1,7 @@
 import { jwtConfig } from "@/config/config";
-import { ROLES } from "@/modules/user/model";
+
 import { JwtPayload, verify } from "jsonwebtoken";
+import { ROLES } from "../user/model";
 
 export interface UserFromPayload extends JwtPayload {
   id: string;

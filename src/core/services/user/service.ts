@@ -1,8 +1,8 @@
 import { compare, hash } from "bcrypt";
 import { randomUUID } from "crypto";
 import { PartialUser, ROLES, SafeUser, User } from "./model";
-import { dbQuery } from "@/utils/dbQuerys/dbQueries";
-import { db } from "@/models/mysql/eventmanagerDb";
+import { dbQuery } from "@/core/database/mappers/db.mapper";
+import { db } from "@/core/database/connection";
 import { sign } from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import { jwtConfig } from "@/config/config";

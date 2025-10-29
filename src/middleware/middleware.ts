@@ -1,4 +1,4 @@
-import { verifyAccessToken } from "@/lib/authenticateToken";
+import { verifyAccessToken } from "@/core/services/auth/authenticateToken";
 import { NextRequest, NextResponse } from "next/server";
 
 export const redirectIfNotValid = async (req: NextRequest) => {

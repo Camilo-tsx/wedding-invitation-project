@@ -1,4 +1,4 @@
-import { db } from "@/models/mysql/eventmanagerDb";
+import { db } from "@/core/database/connection";
 
 // add refreshToken to the db and add the reason why were revoked too
 export const addRevokeToken = async (

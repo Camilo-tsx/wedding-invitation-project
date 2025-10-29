@@ -1,8 +1,8 @@
 import { cookies } from "next/headers";
 import { verify, sign } from "jsonwebtoken";
 import { jwtConfig } from "@/config/config";
-import { getUserById } from "@/modules/user/service";
-import { isTokenRevoked } from "@/auth/revokeTokens";
+import { getUserById } from "@/core/services/user/service";
+import { isTokenRevoked } from "@/core/services/auth/revokeTokens";
 import { UserFromPayload } from "./authenticateToken";
 
 export async function requireAuth() {
